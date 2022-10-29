@@ -6,7 +6,7 @@ const formatTimestamp = (dateString) => {
     const [date, time] = dateString.split('T');
 
     const [year, month, day] = date.split('-');
-    
+
     const [displayTime] = time.split('.');
 
     return `${month} ${day}, ${year} - ${displayTime}`
@@ -32,18 +32,18 @@ const mockData = [
 
 const labels = mockData.map(data => formatTimestamp(data.timeStamp));
 
-  const data = {
+const data = {
     labels: labels,
     datasets: [{
-      label: 'Water flow',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: mockData.map(data => data.currentFlow),
+        label: 'Water flow',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: mockData.map(data => data.currentFlow),
     }]
-  };
+};
 
-  const chartConfig = {
+const chartConfig = {
     type: 'line',
     data: data,
     options: {}
-  };
+};
