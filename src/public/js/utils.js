@@ -17,6 +17,11 @@ const getMonthName = (month) => {
     return months[month];
 }
 
+const getTodaysMonthAndDayString = () => {
+  const dt = new Date();
+  return `${getMonthName(dt.getMonth())}-${dt.getDate()}`
+}
+
 const formatTimestamp = (dateString) => {
     const dt = new Date(dateString);
 
