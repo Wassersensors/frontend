@@ -17,10 +17,6 @@ const getMonthName = (month) => {
     return months[month];
 }
 
-const dateAddSeconds = (seconds) => {
-    return new Date(new Date().getTime() + (seconds || 0) * 1000).toISOString();
-}
-
 const formatTimestamp = (dateString) => {
     const dt = new Date(dateString);
     console.log(new Date(dateString));
