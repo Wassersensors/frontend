@@ -1,18 +1,3 @@
-const dateAddSeconds = (seconds) => {
-    return new Date(new Date().getTime() + (seconds || 0) * 1000).toISOString();
-}
-
-const formatTimestamp = (dateString) => {
-    const [date, time] = dateString.split('T');
-
-    const [year, month, day] = date.split('-');
-
-    const [displayTime] = time.split('.');
-
-    return `${month} ${day}, ${year} - ${displayTime}`
-}
-
-
 const mockData = [
     { currentFlow: 1, timeStamp: dateAddSeconds(1) },
     { currentFlow: 15, timeStamp: dateAddSeconds(2) },
@@ -30,14 +15,23 @@ const mockData = [
     { currentFlow: 43, timeStamp: dateAddSeconds(14) },
 ]
 
-const labels = mockData.map(data => formatTimestamp(data.timeStamp));
+const labels = mockData.map((curr, idx) => {
+    const prev = mockData[idx - 1];
+    let formatted = formatTimestamp(curr.timeStamp);
+
+    if (prev && isSameMonth(prev.timeStamp, curr.timeStamp)) {
+        formatted = formatted.split('-')[1].trim();
+    }
+
+    return formatted;
+});
 
 const data = {
     labels: labels,
     datasets: [{
         label: 'Water flow',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgb(255, 255, 255)',
+        borderColor: 'rgb(113, 50, 168)',
         data: mockData.map(data => data.currentFlow),
     }]
 };
