@@ -19,8 +19,6 @@ const getMonthName = (month) => {
 
 const formatTimestamp = (dateString) => {
     const dt = new Date(dateString);
-    console.log(new Date(dateString));
-    console.log(dateString);
 
     const month = dt.getMonth();
     const day = dt.getDate();
