@@ -1,6 +1,5 @@
 function FlowClient() {
-    this.baseUrl = 'http://hermes.squi.cc:42069'
-    this.testUrl = 'http://localhost:42069'
+    this.baseUrl = 'https://wassersensors-backend.fly.dev'
 }
 
 FlowClient.prototype.getFlowRecord = async function () {
