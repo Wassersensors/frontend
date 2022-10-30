@@ -1,4 +1,7 @@
 window.onload = () => {
+    const todaysDate = getTodaysMonthAndDayString();
+    document.getElementById('todays-date').innerHTML = todaysDate;
+
     const flowChart = new FlowChart();
     flowChart.initialize();
 
