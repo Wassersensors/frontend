@@ -14,7 +14,7 @@ FlowChart.prototype.initialize = function () {
         data: {
             labels: this.labels,
             datasets: [{
-                label: 'WaterFlow',
+                label: 'Basement bathroom shower water flow',
                 backgroundColor: 'rgb(255, 255, 255)',
                 borderColor: 'rgb(113, 50, 168)',
                 data: this.data,

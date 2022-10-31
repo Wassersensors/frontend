@@ -37,7 +37,7 @@ const formatTimestamp = (dateString) => {
         sec = `0${sec}`;
     }
 
-    return `${getMonthName(month)} ${day} ${year} - ${hours}:${min}:${sec}`;
+    return `${hours}:${min}:${sec}`;
 }
 
 const isSameMonth = (d1, d2) => {
