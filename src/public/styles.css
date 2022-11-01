@@ -1,0 +1,20 @@
+#canvas-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+input {
+  width: 200px;
+}
+
+button {
+  width: 200px;
+}
+
+#app {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
