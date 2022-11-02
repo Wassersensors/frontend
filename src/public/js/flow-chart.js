@@ -1,9 +1,10 @@
-function FlowChart() {
+function FlowChart(device_id) {
+    this.device_id = device_id,
     this.data = null,
-        this.labels = null,
-        this.config = null,
-        this.chart = null,
-        this.maxChartSize = 500
+    this.labels = null,
+    this.config = null,
+    this.chart = null,
+    this.maxChartSize = 100
 }
 
 FlowChart.prototype.initialize = function () {
@@ -14,7 +15,7 @@ FlowChart.prototype.initialize = function () {
         data: {
             labels: this.labels,
             datasets: [{
-                label: 'Basement bathroom shower water flow',
+                label: `${this.device_id}: water flow`,
                 backgroundColor: 'rgb(255, 255, 255)',
                 borderColor: 'rgb(113, 50, 168)',
                 data: this.data,
@@ -25,8 +26,9 @@ FlowChart.prototype.initialize = function () {
         }
     };
 
+    const key = `flow-chart-${this.device_id}`;
     this.chart = new Chart(
-        document.getElementById('flow-chart'),
+        document.getElementById(key),
         this.config,
     )
 }
@@ -50,7 +52,7 @@ FlowChart.prototype.addRecord = function ({ label, dataValue }) {
 
     if (this.data.length > this.maxChartSize) {
         this.data = this.data.slice(1);
-        this.labels = chartData.labels.slice(1);
+        this.labels = this.labels.slice(1);
 
         this.chart.data.labels = this.labels;
         this.chart.data.datasets[0].data = this.data;
