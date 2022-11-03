@@ -3,14 +3,14 @@ const setTotalVolume = (newTotalVolume, deviceId) => {
 };
 
 const processRecord = (recordData, charts, volumes) => {
-  const { device_id: deviceId, record } = recordData;
+  const { device_id: deviceId, record, alias } = recordData;
   const { total_volume: totalVolume } = record;
 
   let chart = charts.get(deviceId);
 
   if (!chart) {
     const chartId = `chart-${deviceId}`;
-    addChartContainerContent(chartId, deviceId);
+    addChartContainerContent(chartId, deviceId, alias);
     chart = createChart(deviceId, chartId);
     charts.set(deviceId, chart);
   }
