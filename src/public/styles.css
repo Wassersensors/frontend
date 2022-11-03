@@ -35,3 +35,7 @@ button {
 .chart-container {
   margin-bottom: 2rem;
 }
+
+.device-id {
+  cursor: pointer;
+}

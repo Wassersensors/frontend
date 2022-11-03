@@ -2,7 +2,36 @@ const setTotalVolume = (newTotalVolume, deviceId) => {
   document.getElementById(`total-volume-${deviceId}`).innerHTML = `Total volume: ${newTotalVolume || 0} Liters`;
 };
 
-const processRecord = (recordData, charts, volumes) => {
+const setAliasHandler = (e, client, parentEl, deviceId) => {
+  const alias = e.target.value;
+
+  client.setAlias(alias, deviceId).then((res) => {
+    addDeviceIdEl(alias, parentEl)
+  })
+}
+
+const addDeviceNameClickHandlers = (chartContainer, client, deviceId) => {
+  const deviceNameContainerEls = chartContainer.getElementsByClassName('device-name-container');
+
+  if (!deviceNameContainerEls || !deviceNameContainerEls.length) {
+    return;
+  }
+
+  const deviceIdEls = deviceNameContainerEls[0].getElementsByClassName('device-id');
+  if (!deviceIdEls || !deviceIdEls.length) {
+    return;
+  }
+  deviceIdEls[0]
+    .addEventListener(
+      'click',
+      () => addDeviceAliasInput(
+        deviceNameContainerEls[0],
+        (e) => setAliasHandler(e, client, deviceNameContainerEls[0], deviceId)
+      )
+    )
+}
+
+const processRecord = (recordData, charts, volumes, client) => {
   const { device_id: deviceId, record, alias } = recordData;
   const { total_volume: totalVolume } = record;
 
@@ -10,7 +39,8 @@ const processRecord = (recordData, charts, volumes) => {
 
   if (!chart) {
     const chartId = `chart-${deviceId}`;
-    addChartContainerContent(chartId, deviceId, alias);
+    const chartContainerEl = addChartContainerContent(chartId, deviceId, alias);
+    addDeviceNameClickHandlers(chartContainerEl, client, deviceId);
     chart = createChart(deviceId, chartId);
     charts.set(deviceId, chart);
   }
@@ -22,6 +52,7 @@ const processRecord = (recordData, charts, volumes) => {
   }
   setTotalVolume(totalVolume, deviceId);
 };
+
 
 window.onload = () => {
   const todaysDate = getDisplayDate();
@@ -36,7 +67,7 @@ window.onload = () => {
       .then((res) => res.json())
       .then((res) => {
         for (let recordData of res) {
-          processRecord(recordData, charts, volumes);
+          processRecord(recordData, charts, volumes, client);
         }
       });
   }, 1000);
