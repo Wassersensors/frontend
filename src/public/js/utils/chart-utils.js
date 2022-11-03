@@ -20,10 +20,10 @@ const createChartEl = (chartId) => {
   return chartEl;
 };
 
-const addDeviceIdEl = (deviceId, chartContainerEl) => {
+const addDeviceIdEl = (alias, chartContainerEl) => {
   const wrapperEl = document.createElement('div');
   const deviceIdEl = document.createElement('h2');
-  deviceIdEl.innerText = `Device: ${deviceId}`
+  deviceIdEl.innerText = `Device: ${alias}`
 
   wrapperEl.appendChild(deviceIdEl);
   chartContainerEl.appendChild(wrapperEl);
@@ -41,13 +41,13 @@ const addTotalVolumeEl = (deviceId, chartContainerEl) => {
   chartContainerEl.appendChild(totalVolumeEl);
 };
   
-const addChartContainerContent = (chartId, deviceId) => {
+const addChartContainerContent = (chartId, deviceId, alias) => {
   const chartsParentEl = document.getElementById('charts');
   
   const chartContainerEl = createChartContainerEl();
   chartsParentEl.appendChild(chartContainerEl);
   
-  addDeviceIdEl(deviceId, chartContainerEl);
+  addDeviceIdEl(alias, chartContainerEl);
   addNewChartEl(chartId, chartContainerEl);
   addTotalVolumeEl(deviceId, chartContainerEl);
 };
