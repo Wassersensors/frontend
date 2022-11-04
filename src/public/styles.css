@@ -7,6 +7,11 @@ html {
   padding: 0;
   font-family: 'Source Sans Pro', sans-serif;
   box-sizing: border-box;
+  caret-color: transparent;
+}
+
+input {
+  caret-color: auto;
 }
 
 #app {
@@ -34,4 +39,37 @@ button {
 
 .chart-container {
   margin-bottom: 2rem;
+}
+
+.device-id {
+  cursor: pointer;
+}
+
+button {
+  outline: none;
+  border: none;
+  color: white;
+  background-color: #764dbd;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+button:hover {
+  background-color: #603e9c;
+}
+
+#pause-button {
+  margin-bottom: 1rem;
+}
+
+.device-name-container {
+  height: 2rem;
+}
+
+.device-name-container input {
+  padding: 0.3rem;
+}
+
+.device-name-container input:focus {
+  outline: none;
 }
