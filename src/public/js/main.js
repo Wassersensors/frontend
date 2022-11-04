@@ -5,31 +5,27 @@ const setTotalVolume = (newTotalVolume, deviceId) => {
 const setAliasHandler = (e, client, parentEl, deviceId) => {
   const alias = e.target.value;
 
+  if (!alias) {
+    addDeviceIdEl(deviceId, deviceId, parentEl);
+    addDeviceNameClickHandlers(parentEl, client, deviceId);
+    return;
+  }
+
   client.setAlias(alias, deviceId).then((res) => {
-    addDeviceIdEl(alias, parentEl)
-  })
-}
+    addDeviceIdEl(alias, deviceId, parentEl);
+    addDeviceNameClickHandlers(parentEl, client, deviceId);
+  });
+};
 
-const addDeviceNameClickHandlers = (chartContainer, client, deviceId) => {
-  const deviceNameContainerEls = chartContainer.getElementsByClassName('device-name-container');
+const addDeviceNameClickHandlers = (containerEl, client, deviceId) => {
+  const deviceIdEl = containerEl.getElementsByClassName('device-id')[0];
 
-  if (!deviceNameContainerEls || !deviceNameContainerEls.length) {
+  if (!deviceIdEl) {
     return;
   }
 
-  const deviceIdEls = deviceNameContainerEls[0].getElementsByClassName('device-id');
-  if (!deviceIdEls || !deviceIdEls.length) {
-    return;
-  }
-  deviceIdEls[0]
-    .addEventListener(
-      'click',
-      () => addDeviceAliasInput(
-        deviceNameContainerEls[0],
-        (e) => setAliasHandler(e, client, deviceNameContainerEls[0], deviceId)
-      )
-    )
-}
+  deviceIdEl.addEventListener('click', () => addDeviceAliasInput(containerEl, (e) => setAliasHandler(e, client, containerEl, deviceId)));
+};
 
 const processRecord = (recordData, charts, volumes, client) => {
   const { device_id: deviceId, record, alias } = recordData;
@@ -39,8 +35,9 @@ const processRecord = (recordData, charts, volumes, client) => {
 
   if (!chart) {
     const chartId = `chart-${deviceId}`;
-    const chartContainerEl = addChartContainerContent(chartId, deviceId, alias);
-    addDeviceNameClickHandlers(chartContainerEl, client, deviceId);
+    addChartContainerContent(chartId, deviceId, alias);
+    const deviceNameContainerEl = document.getElementById(getDeviceNameContainerId(deviceId));
+    addDeviceNameClickHandlers(deviceNameContainerEl, client, deviceId);
     chart = createChart(deviceId, chartId);
     charts.set(deviceId, chart);
   }
@@ -53,6 +50,35 @@ const processRecord = (recordData, charts, volumes, client) => {
   setTotalVolume(totalVolume, deviceId);
 };
 
+const initializePolling = (client, charts, volumes) => {
+  const setPollingInterval = () => {
+     return setInterval(() => {
+        client.getFlowRecord()
+          .then((res) => res.json())
+          .then((res) => {
+            for (let recordData of res) {
+              processRecord(recordData, charts, volumes, client);
+            }
+          });
+      }, 1000);
+  }
+  
+  let interval = setPollingInterval();
+  
+  const pauseButton = document.getElementById('pause-button');
+  
+  pauseButton.addEventListener('click', (() => {
+    if (interval) {
+      clearInterval(interval);
+      interval = undefined;
+      pauseButton.innerText = 'Resume';
+    } else {
+      interval = setPollingInterval();
+      pauseButton.innerText = 'Pause';
+    }
+  }));
+}
+
 
 window.onload = () => {
   const todaysDate = getDisplayDate();
@@ -62,14 +88,5 @@ window.onload = () => {
   const volumes = new Map();
   const client = new FlowClient();
 
-  setInterval(() => {
-    client.getFlowRecord()
-      .then((res) => res.json())
-      .then((res) => {
-        for (let recordData of res) {
-          processRecord(recordData, charts, volumes, client);
-        }
-      });
-  }, 1000);
+  initializePolling(client, charts, volumes);
 };
-

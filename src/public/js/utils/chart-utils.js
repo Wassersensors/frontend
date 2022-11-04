@@ -1,3 +1,9 @@
+const getDeviceIdElId = (deviceId) => {
+  return `device-name-${deviceId}`;
+};
+
+const getDeviceNameContainerId = (deviceId) => `device-name-container-${deviceId}`;
+
 const createChart = (deviceId, chartId) => {
   const chart = new FlowChart(deviceId, chartId);
   chart.initialize();
@@ -22,21 +28,22 @@ const createChartEl = (chartId) => {
 
 const addDeviceNameContainer = (deviceId, chartContainerEl) => {
   const wrapperEl = document.createElement('div');
-  wrapperEl.id = `device-name-${deviceId}`;
+  wrapperEl.id = getDeviceNameContainerId(deviceId);
   wrapperEl.classList.add('device-name-container');
   chartContainerEl.appendChild(wrapperEl);
 
   return wrapperEl;
-}
+};
 
-const addDeviceIdEl = (alias, parentEl) => {
+const addDeviceIdEl = (alias, deviceId, parentEl) => {
   const deviceIdEl = document.createElement('h2');
-  deviceIdEl.innerText = `Device: ${alias}`
+  deviceIdEl.innerText = `Device: ${alias}`;
   deviceIdEl.classList.add('device-id');
+  deviceIdEl.id = getDeviceIdElId(deviceId);
 
   removeAliasInput(parentEl);
   parentEl.appendChild(deviceIdEl);
-}
+};
 
 const removeDeviceIdEl = (parentEl) => {
   const deviceIdEls = parentEl.getElementsByClassName('device-id');
@@ -44,7 +51,7 @@ const removeDeviceIdEl = (parentEl) => {
   if (deviceIdEls && deviceIdEls.length) {
     parentEl.removeChild(deviceIdEls[0]);
   }
-}
+};
 
 const addDeviceAliasInput = (parentEl, onBlur) => {
   const aliasInput = document.createElement('input');
@@ -54,7 +61,7 @@ const addDeviceAliasInput = (parentEl, onBlur) => {
 
   removeDeviceIdEl(parentEl);
   parentEl.appendChild(aliasInput);
-}
+};
 
 const removeAliasInput = (parentEl) => {
   const aliasInputs = parentEl.getElementsByClassName('device-alias');
@@ -62,7 +69,7 @@ const removeAliasInput = (parentEl) => {
   if (aliasInputs && aliasInputs.length) {
     parentEl.removeChild(aliasInputs[0]);
   }
-}
+};
 
 const addNewChartEl = (chartId, chartContainerEl) => {
   const chartEl = createChartEl(chartId);
@@ -84,9 +91,9 @@ const addChartContainerContent = (chartId, deviceId, alias) => {
 
   const deviceNameContainer = addDeviceNameContainer(deviceId, chartContainerEl);
 
-  addDeviceIdEl(alias, deviceNameContainer);
-  addNewChartEl(chartId, chartContainerEl);
+  addDeviceIdEl(alias, deviceId, deviceNameContainer);
   addTotalVolumeEl(deviceId, chartContainerEl);
+  addNewChartEl(chartId, chartContainerEl);
 
   return chartContainerEl;
 };
